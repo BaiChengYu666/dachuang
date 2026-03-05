@@ -139,7 +139,18 @@ export default {
         activeMinutes: 87,
         calories: 245
       },
-      activityHistory: [],
+      // 静态历史数据（让页面更丰富，实时数据会插入最上方）
+      activityHistory: [
+        { time: '14:52', activity: '站立',     location: '客厅',    type: 'stand'   },
+        { time: '14:30', activity: '缓慢行走', location: '卧室→客厅', type: 'walk'  },
+        { time: '13:55', activity: '站立',     location: '卧室',    type: 'stand'   },
+        { time: '13:30', activity: '午睡',     location: '卧室',    type: 'sleep'   },
+        { time: '12:00', activity: '用餐',     location: '餐厅',    type: 'meal'    },
+        { time: '10:30', activity: '户外散步', location: '小区花园', type: 'outdoor' },
+        { time: '09:15', activity: '站立',     location: '客厅',    type: 'stand'   },
+        { time: '08:40', activity: '缓慢行走', location: '客厅→餐厅', type: 'walk'  },
+        { time: '08:00', activity: '起床活动', location: '卧室',    type: 'stand'   }
+      ],
       alerts: {
         fall:     true,
         inactive: true,
@@ -183,8 +194,20 @@ export default {
           duration: app.getBehaviorDuration ? app.getBehaviorDuration() : '0秒'
         }
 
+        // 把实时轨迹拼接到静态历史前面（去掉与静态数据时间重叠的部分）
         if (gd.behaviorHistory && gd.behaviorHistory.length > 0) {
-          this.activityHistory = gd.behaviorHistory.slice(0, 20)
+          const staticHistory = [
+            { time: '14:52', activity: '站立',     location: '客厅',     type: 'stand'   },
+            { time: '14:30', activity: '缓慢行走', location: '卧室→客厅', type: 'walk'   },
+            { time: '13:55', activity: '站立',     location: '卧室',     type: 'stand'   },
+            { time: '13:30', activity: '午睡',     location: '卧室',     type: 'sleep'   },
+            { time: '12:00', activity: '用餐',     location: '餐厅',     type: 'meal'    },
+            { time: '10:30', activity: '户外散步', location: '小区花园', type: 'outdoor' },
+            { time: '09:15', activity: '站立',     location: '客厅',     type: 'stand'   },
+            { time: '08:40', activity: '缓慢行走', location: '客厅→餐厅', type: 'walk'  },
+            { time: '08:00', activity: '起床活动', location: '卧室',     type: 'stand'   }
+          ]
+          this.activityHistory = [...gd.behaviorHistory.slice(0, 10), ...staticHistory]
         }
       } catch (e) {}
     },
