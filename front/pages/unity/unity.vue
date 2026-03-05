@@ -263,18 +263,19 @@ export default {
     },
 
     // 前端演示模式：后端连续失败时自动循环 站立↔步行
+    // 时间与 index.html JS 循环保持一致：站立3s → 步行10s
     startDemoMode() {
       if (this._inDemoMode) return
       this._inDemoMode = true
-      console.log('▶ 前端演示模式启动（无后端，自动循环）')
+      console.log('▶ 前端演示模式启动（无后端，站立3s → 步行10s 循环）')
       const cycle = () => {
         if (!this._inDemoMode) return
-        this.applyBehavior('Standing')
+        this.applyBehavior('Standing')           // 角标显示 🧍站立中
         this._demoTimeout = setTimeout(() => {
           if (!this._inDemoMode) return
-          this.applyBehavior('Walking')
-          this._demoTimeout = setTimeout(cycle, 5000)
-        }, 4000)
+          this.applyBehavior('Walking')          // 角标显示 🚶步行中，globalData记"步行"
+          this._demoTimeout = setTimeout(cycle, 10000) // 步行持续 10s
+        }, 3000) // 站立持续 3s
       }
       cycle()
     },

@@ -39,8 +39,8 @@ public class GenderModelManager : MonoBehaviour
 
     [Header("演示模式（无后端时自动循环站立/步行）")]
     public bool  enableDemoMode       = true;
-    public float demoStandDuration    = 4f;   // 站立持续秒数
-    public float demoWalkDuration     = 5f;   // 步行持续秒数
+    public float demoStandDuration    = 3f;   // 站立持续秒数
+    public float demoWalkDuration     = 10f;  // 步行持续秒数（走更长时间再停）
     public int   demoTriggerFailCount = 3;    // 连续失败几次后启动演示
 
     // ---- 内部状态 ----
@@ -328,7 +328,14 @@ public class GenderModelManager : MonoBehaviour
     // JS 调用入口
     // ======================================================
     public void SetGenderFromJS(string gender)         { userGender = gender; SetupModelByGender(gender); }
-    public void UpdateBehaviorFromJS(string behavior)  { ApplyBehavior(behavior); }
+
+    // JS 调用此方法时接管控制权：停止 C# demo mode，防止两个循环互相打架
+    public void UpdateBehaviorFromJS(string behavior)
+    {
+        if (_inDemoMode) StopDemoMode();   // JS 接管，停止 C# 自动循环
+        _consecutiveFails = 0;             // 重置失败计数，防止 demo 重启
+        ApplyBehavior(behavior);
+    }
 
     // ======================================================
     // 工具
