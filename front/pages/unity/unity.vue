@@ -115,6 +115,10 @@ export default {
 
     // 启动行为状态轮询（延迟3s等场景稳定）
     setTimeout(() => { this.startBehaviorPoll() }, 3000)
+
+    // 10s 后启动演示模式（Unity WebGL 加载 + JS 循环开始后同步）
+    // 演示模式运行期间后端数据不覆盖角标，保持与Unity动画一致
+    setTimeout(() => { this.startDemoMode() }, 10000)
   },
 
   onUnload() {
@@ -215,10 +219,12 @@ export default {
         method: 'GET',
         success: (res) => {
           if (res.statusCode === 200 && res.data && res.data.code === 200 && res.data.data) {
-            // 后端有数据：停止演示模式
             this._demoFailCount = 0
-            if (this._inDemoMode) this.stopDemoMode()
-            this.applyBehavior(res.data.data.activityType)
+            // 演示模式运行中（JS已接管Unity动画），不用后端静态数据覆盖角标
+            // 让演示模式自己循环 Standing/Walking，保持与Unity动画一致
+            if (!this._inDemoMode) {
+              this.applyBehavior(res.data.data.activityType)
+            }
           } else {
             this._onBehaviorFail()
           }
