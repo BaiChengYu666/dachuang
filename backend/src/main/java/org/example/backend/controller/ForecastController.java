@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api/forecast")
-@CrossOrigin(origins = "*")
 public class ForecastController {
 
     @Autowired
