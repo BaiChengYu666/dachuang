@@ -1,0 +1,171 @@
+{
+  "pages": [
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "登录注册",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "i龄守护",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/behavior/behavior",
+      "style": {
+        "navigationBarTitleText": "行为轨迹",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/ai/ai",
+      "style": {
+        "navigationBarTitleText": "AI健康助手",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/risk/risk",
+      "style": {
+        "navigationBarTitleText": "风险分析",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/settings/settings",
+      "style": {
+        "navigationBarTitleText": "设置",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/detail/detail",
+      "style": {
+        "navigationBarTitleText": "健康详情",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/environment/environment",
+      "style": {
+        "navigationBarTitleText": "环境监测",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "disableScroll": true
+      }
+    },
+    {
+      "path": "pages/unity/unity",
+      "style": {
+        "navigationBarTitleText": "Unity 3D虚拟人",
+        "navigationBarBackgroundColor": "#1a1a2e",
+        "navigationBarTextStyle": "white",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/assessment/assessment",
+      "style": {
+        "navigationBarTitleText": "AI健康评估",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/device/device",
+      "style": {
+        "navigationBarTitleText": "我的设备",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/guardian/guardian",
+      "style": {
+        "navigationBarTitleText": "监护人管理",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/report/report",
+      "style": {
+        "navigationBarTitleText": "健康报告",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/forecast/forecast",
+      "style": {
+        "navigationBarTitleText": "趋势预测",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/terms/terms",
+      "style": {
+        "navigationBarTitleText": "用户协议",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "i龄守护",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f0f4f0"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#999999",
+    "selectedColor": "#4CAF50",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/icon/home.png",
+        "selectedIconPath": "static/icon/home-active.png"
+      },
+      {
+        "pagePath": "pages/behavior/behavior",
+        "text": "行为",
+        "iconPath": "static/icon/behavior.png",
+        "selectedIconPath": "static/icon/behavior-active.png"
+      },
+      {
+        "pagePath": "pages/ai/ai",
+        "text": "AI",
+        "iconPath": "static/icon/ai.png",
+        "selectedIconPath": "static/icon/ai-active.png"
+      },
+      {
+        "pagePath": "pages/risk/risk",
+        "text": "风险",
+        "iconPath": "static/icon/risk.png",
+        "selectedIconPath": "static/icon/risk-active.png"
+      },
+      {
+        "pagePath": "pages/settings/settings",
+        "text": "设置",
+        "iconPath": "static/icon/we.png",
+        "selectedIconPath": "static/icon/we-active.png"
+      }
+    ]
+  },
+  "uniIdRouter": {}
+}

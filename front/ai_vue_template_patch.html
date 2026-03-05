@@ -1,0 +1,73 @@
+<!-- ====================================
+     AI页面模板补丁 - 找到对应部分替换
+     ==================================== -->
+
+<!-- 1. 消息列表部分 - 找到这段并替换 -->
+<!-- 消息列表 -->
+<view class="message-list">
+  <!-- 根据role区分AI和用户消息 -->
+  <view 
+    v-for="(msg, index) in messages" 
+    :key="index"
+    class="message-item"
+    :class="msg.role === 'ai' ? 'ai-message' : 'user-message'">
+    
+    <!-- AI消息：头像在左 -->
+    <image 
+      v-if="msg.role === 'ai'"
+      class="avatar" 
+      src="/static/logo.png" 
+      mode="aspectFill">
+    </image>
+    
+    <!-- 消息内容 -->
+    <view class="message-content">
+      <text class="message-text">{{ msg.content }}</text>
+      <text class="message-time">{{ msg.time }}</text>
+    </view>
+    
+    <!-- 用户消息：头像在右 -->
+    <image 
+      v-if="msg.role === 'user'"
+      class="avatar" 
+      src="/static/logo.png" 
+      mode="aspectFill">
+    </image>
+  </view>
+  
+  <!-- 加载中 -->
+  <view v-if="loading" class="loading-item">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">AI正在思考中...</text>
+  </view>
+</view>
+
+<!-- 2. 输入区域部分 - 找到这段并替换 -->
+<!-- 输入区域 -->
+<view class="input-container">
+  <!-- 输入框和发送按钮 -->
+  <view class="input-wrapper">
+    <textarea 
+      class="input-area" 
+      v-model="inputContent" 
+      placeholder="请输入您的健康问题..."
+      placeholder-style="color:#999;font-size:28rpx"
+      maxlength="500"
+      @input="autoResize"
+      :style="{height: inputHeight + 'rpx'}">
+    </textarea>
+    
+    <!-- 发送按钮在右下角 -->
+    <button 
+      class="send-btn" 
+      @click="sendMessage"
+      :disabled="!inputContent.trim() || loading">
+      <text class="send-text">发送</text>
+    </button>
+  </view>
+  
+  <!-- 字数统计 -->
+  <view class="input-footer">
+    <text class="char-count">{{ inputContent.length }}/500</text>
+  </view>
+</view>

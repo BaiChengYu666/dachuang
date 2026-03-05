@@ -1,0 +1,297 @@
+/* ====================================
+   AI页面完整样式补丁 - 复制到ai.vue的<style>部分
+   ==================================== */
+
+/* 基础容器 */
+.ai-container {
+  min-height: 100vh;
+  background: #faf7f2;
+  padding: 20rpx 30rpx;
+  padding-bottom: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 顶部标题栏 */
+.header {
+  text-align: center;
+  padding: 30rpx 0;
+  margin-bottom: 20rpx;
+}
+
+.header-title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #4a4a4a;
+  margin-bottom: 10rpx;
+}
+
+.header-desc {
+  display: block;
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 聊天容器 */
+.chat-container {
+  flex: 1;
+  margin-bottom: 20rpx;
+}
+
+/* 欢迎卡片 */
+.welcome-card {
+  background: #ffffff;
+  border-radius: 30rpx;
+  padding: 40rpx 30rpx;
+  box-shadow: 0 4rpx 15rpx rgba(0, 0, 0, 0.03);
+  text-align: center;
+  margin-bottom: 20rpx;
+}
+
+.welcome-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  margin-bottom: 20rpx;
+}
+
+.welcome-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #4a4a4a;
+  margin-bottom: 15rpx;
+}
+
+.welcome-desc {
+  display: block;
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 30rpx;
+}
+
+/* 推荐问题 */
+.suggest-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+}
+
+.suggest-item {
+  background: #f0fcf0;
+  color: #73c973;
+  padding: 15rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.suggest-item:active {
+  background: #e6f7e6;
+  transform: scale(0.98);
+}
+
+/* 消息列表 */
+.message-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25rpx;
+}
+
+.message-item {
+  display: flex;
+  max-width: 85%;
+  align-items: flex-end;
+}
+
+/* AI消息：左对齐 */
+.ai-message {
+  align-self: flex-start;
+  flex-direction: row;
+}
+
+/* 用户消息：右对齐 */
+.user-message {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+/* 头像 */
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: #f0eeeb;
+}
+
+.ai-message .avatar {
+  margin-right: 20rpx;
+}
+
+.user-message .avatar {
+  margin-left: 20rpx;
+}
+
+/* 消息气泡 */
+.message-content {
+  background: #ffffff;
+  border-radius: 30rpx;
+  padding: 20rpx 25rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  position: relative;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+/* AI消息气泡 */
+.ai-message .message-content {
+  border-top-left-radius: 10rpx;
+  background: #f0fcf0;
+}
+
+/* 用户消息气泡 */
+.user-message .message-content {
+  border-top-right-radius: 10rpx;
+  background: #73c973;
+}
+
+/* 消息文字 */
+.message-text {
+  font-size: 28rpx;
+  line-height: 1.6;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.ai-message .message-text {
+  color: #4a4a4a;
+}
+
+.user-message .message-text {
+  color: #ffffff;
+}
+
+/* 消息时间 */
+.message-time {
+  font-size: 20rpx;
+  color: #ccc;
+  display: block;
+  text-align: right;
+}
+
+.user-message .message-time {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 加载中 */
+.loading-item {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 15rpx;
+  padding: 15rpx 30rpx;
+  background: #f0fcf0;
+  border-radius: 30rpx;
+  margin: 10rpx 0;
+}
+
+.loading-spinner {
+  width: 40rpx;
+  height: 40rpx;
+  border: 4rpx solid rgba(115, 201, 115, 0.3);
+  border-top-color: #73c973;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 26rpx;
+  color: #73c973;
+}
+
+/* ==================== 输入区域（关键修改）==================== */
+.input-container {
+  background: #ffffff;
+  border-radius: 30rpx;
+  padding: 20rpx;
+  box-shadow: 0 4rpx 15rpx rgba(0, 0, 0, 0.03);
+  margin-bottom: 20rpx;
+}
+
+.input-wrapper {
+  position: relative;
+  min-height: 100rpx;
+  display: flex;
+  align-items: flex-end;
+}
+
+.input-area {
+  flex: 1;
+  min-height: 100rpx;
+  max-height: 300rpx;
+  font-size: 28rpx;
+  color: #4a4a4a;
+  border: none;
+  outline: none;
+  resize: none;
+  padding: 10rpx;
+  padding-right: 10rpx;
+  box-sizing: border-box;
+  line-height: 1.5;
+}
+
+/* 发送按钮 - 在右下角 */
+.send-btn {
+  background: #73c973;
+  color: #ffffff;
+  border: none;
+  border-radius: 20rpx;
+  padding: 10rpx 25rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  min-width: 100rpx;
+  margin-left: 10rpx;
+  flex-shrink: 0;
+  height: 70rpx;
+  line-height: 70rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.send-btn:disabled {
+  background: #cccccc;
+  color: #999999;
+}
+
+.send-btn::after {
+  border: none;
+}
+
+.send-text {
+  font-size: 28rpx;
+}
+
+.input-footer {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 10rpx;
+  padding-left: 10rpx;
+}
+
+.char-count {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.bottom-space {
+  height: 30rpx;
+}

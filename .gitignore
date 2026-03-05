@@ -1,0 +1,38 @@
+# ===== Unity =====
+people/Library/
+people/Temp/
+people/Logs/
+people/obj/
+people/UserSettings/Layouts/
+people/WebGLBuild/
+people/WebGLDeploy/
+*.pidb.meta
+*.pdb.meta
+
+# ===== Java / Maven =====
+backend/target/
+backend/*.class
+*.jar
+
+# ===== Python =====
+ai-service/__pycache__/
+ai-service/*.pyc
+ai-service/*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# ===== 前端 =====
+front/unpackage/
+front/node_modules/
+node_modules/
+
+# ===== Claude 工具 =====
+.claude/
+
+# ===== 系统 & IDE =====
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
