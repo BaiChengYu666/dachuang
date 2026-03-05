@@ -53,6 +53,11 @@ public class GenderModelManager : MonoBehaviour
     private bool      _inDemoMode       = false;
     private Coroutine _demoCoroutine    = null;
 
+    // ---- JS 接管标志 ----
+    // 一旦 JS 调用过 UpdateBehaviorFromJS，设为 true
+    // 后端轮询数据不再覆盖 JS 控制的动画
+    private bool _jsInControl = false;
+
     // ---- 生命周期 ----
     void Start()
     {
@@ -100,10 +105,12 @@ public class GenderModelManager : MonoBehaviour
 
                 if (resp != null && resp.code == 200 && resp.data != null)
                 {
-                    // 后端有数据：停止演示模式，使用真实数据
                     _consecutiveFails = 0;
                     if (_inDemoMode) StopDemoMode();
-                    ApplyBehavior(resp.data.activityType);
+
+                    // JS 已接管动画控制权时，忽略后端数据，避免覆盖 JS 设置的动作
+                    if (!_jsInControl)
+                        ApplyBehavior(resp.data.activityType);
                 }
                 else
                 {
@@ -329,10 +336,13 @@ public class GenderModelManager : MonoBehaviour
     // ======================================================
     public void SetGenderFromJS(string gender)         { userGender = gender; SetupModelByGender(gender); }
 
-    // JS 调用此方法时接管控制权：停止 C# demo mode，防止两个循环互相打架
+    // JS 调用此方法时接管控制权：
+    // 1. 停止 C# demo mode，防止两个循环互相打架
+    // 2. 设置 _jsInControl = true，后端轮询不再覆盖 JS 设置的动作
     public void UpdateBehaviorFromJS(string behavior)
     {
-        if (_inDemoMode) StopDemoMode();   // JS 接管，停止 C# 自动循环
+        _jsInControl = true;               // JS 接管，后端数据不再覆盖动画
+        if (_inDemoMode) StopDemoMode();   // 停止 C# 自动循环
         _consecutiveFails = 0;             // 重置失败计数，防止 demo 重启
         ApplyBehavior(behavior);
     }
