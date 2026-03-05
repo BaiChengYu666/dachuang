@@ -1,5 +1,7 @@
 package org.example.backend.controller;
 
+import org.example.backend.entity.HealthRiskRecord;
+import org.example.backend.repository.HealthRiskRecordRepository;
 import org.example.backend.service.AIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ public class RiskController {
     
     @Autowired
     private AIService aiService;
+
+    @Autowired
+    private HealthRiskRecordRepository riskRepo;
     
     /**
      * 获取健康风险分析
@@ -79,8 +84,43 @@ public class RiskController {
     }
     
     /**
+     * 获取最新风险评估记录
+     * GET /api/risk/latest?elderlyId=1
+     */
+    @GetMapping("/latest")
+    public Map<String, Object> getLatestRisk(@RequestParam(defaultValue = "1") Long elderlyId) {
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> data    = new HashMap<>();
+
+        riskRepo.findFirstByElderlyIdOrderByCreatedAtDesc(elderlyId).ifPresentOrElse(r -> {
+            String level = r.getRiskLevel() != null ? r.getRiskLevel() : "low";
+            data.put("riskScore", r.getRiskScore() != null ? r.getRiskScore() : 15.0);
+            data.put("riskLevel", level);
+            data.put("riskText",  riskLevelText(level));
+            data.put("statusLabel", r.getStatusLabel());
+            data.put("riskFactors", r.getRiskFactors());
+        }, () -> {
+            // 数据库无记录时返回默认低风险
+            data.put("riskScore", 15.0);
+            data.put("riskLevel", "low");
+            data.put("riskText",  "低风险");
+            data.put("statusLabel", "状态良好");
+            data.put("riskFactors", "");
+        });
+
+        response.put("code", 200);
+        response.put("data", data);
+        return response;
+    }
+
+    private String riskLevelText(String level) {
+        if ("high".equals(level))   return "高风险";
+        if ("medium".equals(level)) return "中风险";
+        return "低风险";
+    }
+
+    /**
      * 检查AI服务状态
-     * 
      * GET /api/risk/status
      */
     @GetMapping("/status")
