@@ -215,17 +215,34 @@ export default {
         method: 'GET',
         success: (res) => {
           if (res.statusCode === 200 && res.data && res.data.code === 200 && res.data.data) {
+            // 后端有数据：停止演示模式
+            this._demoFailCount = 0
+            if (this._inDemoMode) this.stopDemoMode()
             this.applyBehavior(res.data.data.activityType)
+          } else {
+            this._onBehaviorFail()
           }
         },
-        fail: () => {}
+        fail: () => { this._onBehaviorFail() }
       })
+    },
+
+    _onBehaviorFail() {
+      this._demoFailCount = (this._demoFailCount || 0) + 1
+      if (this._demoFailCount >= 3 && !this._inDemoMode) this.startDemoMode()
     },
 
     applyBehavior(activityType) {
       if (!activityType) return
       this.currentBehavior = activityType
       const falling = activityType.toLowerCase() === 'falling' || activityType === '跌倒'
+
+      // 推送到全局状态，同步所有页面
+      try {
+        const app = getApp()
+        if (app && app.pushBehavior) app.pushBehavior(activityType)
+      } catch (e) {}
+
       if (falling && !this.isFalling) {
         this.isFalling = true
         uni.showModal({
@@ -243,6 +260,28 @@ export default {
       } else if (!falling) {
         this.isFalling = false
       }
+    },
+
+    // 前端演示模式：后端连续失败时自动循环 站立↔步行
+    startDemoMode() {
+      if (this._inDemoMode) return
+      this._inDemoMode = true
+      console.log('▶ 前端演示模式启动（无后端，自动循环）')
+      const cycle = () => {
+        if (!this._inDemoMode) return
+        this.applyBehavior('Standing')
+        this._demoTimeout = setTimeout(() => {
+          if (!this._inDemoMode) return
+          this.applyBehavior('Walking')
+          this._demoTimeout = setTimeout(cycle, 5000)
+        }, 4000)
+      }
+      cycle()
+    },
+
+    stopDemoMode() {
+      this._inDemoMode = false
+      if (this._demoTimeout) { clearTimeout(this._demoTimeout); this._demoTimeout = null }
     },
     
     // 数据同步

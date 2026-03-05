@@ -272,6 +272,13 @@ export default {
   onShow() {
     this.checkLogin()
     this.syncTabBar()
+    // 从全局状态同步最新行为（切回首页时立即刷新）
+    try {
+      const app = getApp()
+      if (app && app.globalData && app.globalData.currentBehavior) {
+        this.applyBehavior(app.globalData.currentBehavior)
+      }
+    } catch (e) {}
     if (!this._timer) {
       this.startHealthDataUpdate()
     }
@@ -471,6 +478,13 @@ export default {
       // 同步更新行为卡片
       const labelMap = { walking: '步行', standing: '站立', falling: '跌倒' }
       this.behavior.activity = labelMap[(activityType || '').toLowerCase()] || this.behavior.activity
+
+      // 推送到全局状态（同步行为页时间轴）
+      try {
+        const app = getApp()
+        if (app && app.pushBehavior) app.pushBehavior(activityType)
+        if (app && app.getBehaviorDuration) this.behavior.duration = app.getBehaviorDuration()
+      } catch (e) {}
 
       const falling = activityType.toLowerCase() === 'falling' || activityType === '跌倒'
       if (falling && !this.isFalling) {
