@@ -132,7 +132,7 @@ export default {
       currentTab: 'login',
       agreed: false,
       loginForm: { phone: '', password: '' },
-      registerForm: { phone: '', password: '', gender: 'female' }
+      registerForm: { phone: '', password: '', gender: 'male' }
     }
   },
 

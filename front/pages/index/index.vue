@@ -216,7 +216,7 @@ export default {
       userInfo: {
         username: '',
         nickname: '',
-        gender: 'female',
+        gender: 'male',
         avatarUrl: '/static/default-avatar.webp'
       },
       unityUrl: '',
@@ -350,15 +350,15 @@ export default {
         if (userInfo) {
           this.userInfo = userInfo
           if (!this.userInfo.gender || this.userInfo.gender === '未知') {
-            this.userInfo.gender = 'female'
+            this.userInfo.gender = 'male'
           }
           // 从存储中读取 elderlyId
           if (userInfo.elderlyId) {
             this.elderlyId = userInfo.elderlyId
           }
         }
-        const gender = this.userInfo.gender
-        this.unityUrl = `https://unity-web-gl-iota.vercel.app/index.html?gender=${gender}`
+        // 无论用户性别，3D模型始终使用男性
+        this.unityUrl = `https://unity-web-gl-iota.vercel.app/index.html?gender=male`
       } catch (e) {
         console.error('读取用户信息失败:', e)
       }

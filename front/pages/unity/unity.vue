@@ -37,7 +37,7 @@
 export default {
   data() {
     return {
-      unityUrl: 'https://unity-web-gl-iota.vercel.app/index.html?gender=female', // 默认女性
+      unityUrl: 'https://unity-web-gl-iota.vercel.app/index.html?gender=male', // 默认男性
       
       isLoading: true,
       loadingProgress: 0,
@@ -82,25 +82,15 @@ export default {
     // 读取登录用户性别
     try {
       const userInfo = uni.getStorageSync('userInfo')
-      let gender = 'female' // 默认女性
-
-      if (userInfo && userInfo.gender) {
-        // 处理"未知"或空值
-        if (userInfo.gender === 'male' || userInfo.gender === '男') {
-          gender = 'male'
-        } else {
-          gender = 'female'
-        }
-      }
 
       // 读取 elderlyId
       if (userInfo && userInfo.elderlyId) {
         this.elderlyId = userInfo.elderlyId
       }
 
-      // 拼接性别和 elderlyId 参数到 Unity URL
-      this.unityUrl = `https://unity-web-gl-iota.vercel.app/index.html?gender=${gender}&elderlyId=${this.elderlyId}`
-      console.log('👤 用户性别:', gender, '老人ID:', this.elderlyId)
+      // 无论用户性别，3D模型始终使用男性
+      this.unityUrl = `https://unity-web-gl-iota.vercel.app/index.html?gender=male&elderlyId=${this.elderlyId}`
+      console.log('👤 模型性别: male', '老人ID:', this.elderlyId)
       console.log('🎮 Unity URL:', this.unityUrl)
 
     } catch (e) {
