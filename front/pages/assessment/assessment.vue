@@ -5,7 +5,7 @@
     <view class="form-card">
       <view class="form-card-title">
         <text class="form-card-title-icon">📝</text>
-        <text class="form-card-title-text">填写健康指标</text>
+        <text class="form-card-title-text">{{ autoLoaded ? '当前健康指标（实时同步）' : '填写健康指标' }}</text>
       </view>
 
       <view class="form-item" v-for="field in fields" :key="field.key">
@@ -136,6 +136,8 @@ export default {
       result: null,
       userAge: 70,
       userGender: 0,
+      elderlyId: 1,
+      autoLoaded: false,
       fields: [
         { key: 'heartRate', icon: '❤️', label: '心率',     unit: 'bpm',  placeholder: '例如：72',   range: '正常 60-100' },
         { key: 'bpHigh',   icon: '📈', label: '收缩压',   unit: 'mmHg', placeholder: '例如：120',  range: '正常 90-140' },
@@ -152,11 +154,41 @@ export default {
       if (userInfo) {
         this.userAge    = userInfo.age || 70
         this.userGender = userInfo.gender === 'male' ? 1 : 0
+        if (userInfo.elderlyId) this.elderlyId = userInfo.elderlyId
       }
     } catch (e) {}
+    // 自动加载当前健康数据并评估
+    this.autoLoadAndAssess()
   },
 
   methods: {
+    async autoLoadAndAssess() {
+      try {
+        const res = await new Promise((resolve, reject) => {
+          uni.request({
+            url: `http://121.43.211.31:8080/api/data/physiological/latest/${this.elderlyId}`,
+            method: 'GET',
+            success: resolve,
+            fail: reject
+          })
+        })
+        if (res.statusCode === 200 && res.data && res.data.code === 200 && res.data.data) {
+          const d = res.data.data
+          this.data.heartRate = d.heartRate || null
+          this.data.bpHigh   = d.bloodPressureHigh || null
+          this.data.bpLow    = d.bloodPressureLow || null
+          this.data.oxygen   = d.bloodOxygen || null
+          this.data.temp     = d.bodyTemperature || null
+          this.autoLoaded = true
+          // 数据填入后自动评估
+          await this.$nextTick()
+          this.assess()
+        }
+      } catch (e) {
+        // 后端不可用，用户手动输入
+      }
+    },
+
     async assess() {
       if (!this.validate()) return
       this.loading = true

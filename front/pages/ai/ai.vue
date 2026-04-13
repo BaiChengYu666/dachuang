@@ -182,7 +182,7 @@ export default {
     async getAIResponse(question) {
       try {
         const res = await uni.request({
-          url: 'http://localhost:8080/api/ai/chat',
+          url: 'http://121.43.211.31:8080/api/ai/chat',
           method: 'POST',
           header: { 'Content-Type': 'application/json' },
           data: { message: question }

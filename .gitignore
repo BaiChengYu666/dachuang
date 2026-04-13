@@ -25,6 +25,7 @@ venv/
 # ===== 前端 =====
 front/unpackage/
 front/node_modules/
+front/dist/
 node_modules/
 
 # ===== Claude 工具 =====

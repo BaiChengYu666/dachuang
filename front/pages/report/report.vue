@@ -195,7 +195,7 @@ export default {
       this.loading = true
       try {
         const res = await uni.request({
-          url: `http://localhost:8080/api/report/${this.userPhone || 'guest'}`,
+          url: `http://121.43.211.31:8080/api/report/${this.userPhone || 'guest'}`,
           method: 'GET'
         })
         if (res.statusCode === 200 && res.data.code === 200) {

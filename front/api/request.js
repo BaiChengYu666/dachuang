@@ -2,7 +2,7 @@
 // 根据运行环境自动切换后端地址
 const BASE_URL = process.env.NODE_ENV === 'development' 
   ? '/api'  // 开发环境使用代理
-  : 'http://localhost:8080'  // 生产环境直连
+  : 'http://121.43.211.31:8080'  // 生产环境直连
 
 // 请求封装
 const request = (options) => {

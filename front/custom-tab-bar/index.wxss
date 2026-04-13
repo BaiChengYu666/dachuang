@@ -1,0 +1,66 @@
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 120rpx;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: #ffffff;
+  border-top: 1rpx solid #e8e8e8;
+  z-index: 9999;
+}
+
+.tab-bar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+}
+
+/* 普通图标 */
+.tab-icon {
+  width: 48rpx;
+  height: 48rpx;
+  margin-bottom: 4rpx;
+}
+
+/* 普通文字 */
+.tab-text {
+  font-size: 20rpx;
+  color: #999999;
+}
+
+.tab-text-active {
+  color: #4CAF50;
+  font-weight: 600;
+}
+
+/* 中间 AI 凸起按钮 */
+.center-btn {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #66BB6A, #2E7D32);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -50rpx;
+  box-shadow: 0 4rpx 12rpx rgba(46, 125, 50, 0.4);
+  border: 3rpx solid #fff;
+}
+
+.center-btn-active {
+  background: linear-gradient(135deg, #43A047, #1B5E20);
+  box-shadow: 0 4rpx 16rpx rgba(46, 125, 50, 0.6);
+}
+
+.center-icon-img {
+  width: 48rpx;
+  height: 48rpx;
+}

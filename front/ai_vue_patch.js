@@ -6,7 +6,7 @@ async getAIResponse(question) {
   try {
     // 调用后端接口
     const res = await uni.request({
-      url: 'http://localhost:8080/api/ai/chat',
+      url: 'http://121.43.211.31:8080/api/ai/chat',
       method: 'POST',
       header: {
         'Content-Type': 'application/json'

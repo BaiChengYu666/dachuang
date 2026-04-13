@@ -205,7 +205,7 @@ export default {
 
     fetchBehavior() {
       uni.request({
-        url: `http://localhost:8080/api/data/behavior/latest/${this.elderlyId}`,
+        url: `http://121.43.211.31:8080/api/data/behavior/latest/${this.elderlyId}`,
         method: 'GET',
         success: (res) => {
           if (res.statusCode === 200 && res.data && res.data.code === 200 && res.data.data) {

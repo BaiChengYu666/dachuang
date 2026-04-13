@@ -1,0 +1,23 @@
+<view class="tab-bar">
+  <view
+    wx:for="{{list}}"
+    wx:key="index"
+    class="tab-bar-item"
+    data-index="{{index}}"
+    bindtap="switchTab">
+
+    <!-- 中间 AI 凸起按钮 -->
+    <block wx:if="{{index === 2}}">
+      <view class="center-btn {{selected === 2 ? 'center-btn-active' : ''}}">
+        <image class="center-icon-img" src="{{selected === 2 ? item.activeIcon : item.icon}}" mode="aspectFit"></image>
+      </view>
+      <text class="tab-text {{selected === 2 ? 'tab-text-active' : ''}}">{{item.text}}</text>
+    </block>
+
+    <!-- 普通 Tab -->
+    <block wx:else>
+      <image class="tab-icon" src="{{selected === index ? item.activeIcon : item.icon}}" mode="aspectFit"></image>
+      <text class="tab-text {{selected === index ? 'tab-text-active' : ''}}">{{item.text}}</text>
+    </block>
+  </view>
+</view>

@@ -229,7 +229,7 @@ export default {
         const tempFilePath = chooseRes[1].tempFilePaths[0]
         uni.showLoading({ title: '上传中...' })
         const uploadRes = await uni.uploadFile({
-          url: 'http://localhost:8080/api/user/' + this.userInfo.phone + '/avatar',
+          url: 'http://121.43.211.31:8080/api/user/' + this.userInfo.phone + '/avatar',
           filePath: tempFilePath,
           name: 'file'
         })
@@ -269,7 +269,7 @@ export default {
             const newName = res.content.trim()
             try {
               const result = await uni.request({
-                url: `http://localhost:8080/api/user/${this.userInfo.phone}/profile`,
+                url: `http://121.43.211.31:8080/api/user/${this.userInfo.phone}/profile`,
                 method: 'PUT',
                 header: { 'Content-Type': 'application/json' },
                 data: { nickname: newName }
@@ -300,7 +300,7 @@ export default {
             if (!isNaN(age) && age > 0 && age < 150) {
               try {
                 const result = await uni.request({
-                  url: `http://localhost:8080/api/user/${this.userInfo.phone}/profile`,
+                  url: `http://121.43.211.31:8080/api/user/${this.userInfo.phone}/profile`,
                   method: 'PUT',
                   header: { 'Content-Type': 'application/json' },
                   data: { age }
@@ -336,7 +336,7 @@ export default {
             const genderVal = next === '男' ? 'male' : 'female'
             try {
               const result = await uni.request({
-                url: `http://localhost:8080/api/user/${this.userInfo.phone}/gender`,
+                url: `http://121.43.211.31:8080/api/user/${this.userInfo.phone}/gender`,
                 method: 'PUT',
                 header: { 'Content-Type': 'application/json' },
                 data: { gender: genderVal }
@@ -422,8 +422,8 @@ export default {
       if (!phone) return
       try {
         const [dRes, gRes] = await Promise.all([
-          uni.request({ url: `http://localhost:8080/api/device/${phone}`, method: 'GET' }),
-          uni.request({ url: `http://localhost:8080/api/guardian/${phone}`, method: 'GET' })
+          uni.request({ url: `http://121.43.211.31:8080/api/device/${phone}`, method: 'GET' }),
+          uni.request({ url: `http://121.43.211.31:8080/api/guardian/${phone}`, method: 'GET' })
         ])
         if (dRes.statusCode === 200 && dRes.data.code === 200) {
           this.deviceCount = (dRes.data.data || []).length

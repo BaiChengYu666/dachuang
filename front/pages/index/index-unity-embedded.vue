@@ -239,7 +239,7 @@ export default {
       try {
         const res = await new Promise((resolve, reject) => {
           uni.request({
-            url: `http://localhost:8080/api/behavior/current/${this.elderlyId}`,
+            url: `http://121.43.211.31:8080/api/behavior/current/${this.elderlyId}`,
             method: 'GET',
             success: resolve,
             fail: reject
@@ -297,7 +297,7 @@ export default {
       try {
         console.log('🔄 正在从后端加载数据... elderlyId:', this.elderlyId)
         
-        const url = `http://localhost:8080/api/data/latest/${this.elderlyId}`
+        const url = `http://121.43.211.31:8080/api/data/latest/${this.elderlyId}`
         console.log('🌐 请求URL:', url)
         
         const res = await new Promise((resolve, reject) => {

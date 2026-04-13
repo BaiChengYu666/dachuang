@@ -119,7 +119,7 @@ export default {
       if (!this.userPhone) return
       try {
         const res = await uni.request({
-          url: `http://localhost:8080/api/guardian/${this.userPhone}`,
+          url: `http://121.43.211.31:8080/api/guardian/${this.userPhone}`,
           method: 'GET'
         })
         if (res.statusCode === 200 && res.data.code === 200) {
@@ -165,14 +165,14 @@ export default {
         let res
         if (this.editingId) {
           res = await uni.request({
-            url: `http://localhost:8080/api/guardian/${this.editingId}`,
+            url: `http://121.43.211.31:8080/api/guardian/${this.editingId}`,
             method: 'PUT',
             header: { 'Content-Type': 'application/json' },
             data: { ...this.form }
           })
         } else {
           res = await uni.request({
-            url: 'http://localhost:8080/api/guardian',
+            url: 'http://121.43.211.31:8080/api/guardian',
             method: 'POST',
             header: { 'Content-Type': 'application/json' },
             data: { userPhone: this.userPhone, ...this.form }
@@ -199,7 +199,7 @@ export default {
           if (!res.confirm) return
           try {
             const result = await uni.request({
-              url: `http://localhost:8080/api/guardian/${id}?userPhone=${this.userPhone}`,
+              url: `http://121.43.211.31:8080/api/guardian/${id}?userPhone=${this.userPhone}`,
               method: 'DELETE'
             })
             if (result.statusCode === 200 && result.data.code === 200) {
@@ -214,7 +214,7 @@ export default {
     async setPrimary(contact, index) {
       try {
         const res = await uni.request({
-          url: `http://localhost:8080/api/guardian/${contact.id}`,
+          url: `http://121.43.211.31:8080/api/guardian/${contact.id}`,
           method: 'PUT',
           header: { 'Content-Type': 'application/json' },
           data: { name: contact.name, contactPhone: contact.contactPhone, relationship: contact.relationship, isPrimary: true }

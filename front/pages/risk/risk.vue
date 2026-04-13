@@ -177,10 +177,18 @@ export default {
       calling: false,
       callingInfo: { avatar: '', name: '', phone: '', rel: '' },
       adviceList: [
-        { icon: '🏃', title: '增加运动', desc: '建议每天进行 30 分钟轻度运动，如散步、太极等' },
-        { icon: '🥗', title: '均衡饮食', desc: '多摄入蔬菜水果，减少高盐高脂食物' },
-        { icon: '😴', title: '规律作息', desc: '保持每天 7-8 小时睡眠，避免熬夜' },
-        { icon: '💊', title: '按时服药', desc: '请按医嘱定时定量服用药物' }
+        { icon: '🌅', title: '6:30 晨起量血压', desc: '起床后静坐5分钟再测量，连续测2次取平均值，记录到健康日志' },
+        { icon: '🥣', title: '7:00 早餐用药', desc: '降压药/降糖药随早餐服用，避免空腹。早餐宜低盐粥+鸡蛋+蔬菜' },
+        { icon: '🧘', title: '8:00 晨练半小时', desc: '太极拳或慢走为宜，避免剧烈运动。心率控制在(220-年龄)×60%以内' },
+        { icon: '💧', title: '9:30 补水提醒', desc: '老年人渴觉减退，每隔1.5小时主动饮水150-200ml，预防脱水' },
+        { icon: '🩺', title: '10:00 测量血氧', desc: '安静状态下夹指测血氧，低于95%需警惕，低于90%立即就医' },
+        { icon: '🍲', title: '11:30 午餐营养', desc: '主食粗细搭配，蛋白质(鱼/豆腐)不少于掌心大小，蔬菜占一半' },
+        { icon: '😴', title: '12:30 午休30分钟', desc: '饭后不要立即躺下，散步10分钟后再午休，不超过40分钟' },
+        { icon: '🧠', title: '15:00 认知训练', desc: '读报、下棋、做手工，每天30分钟大脑锻炼可延缓认知衰退' },
+        { icon: '🏃', title: '16:30 下午散步', desc: '傍晚是心血管最稳定的时段，散步30-40分钟，注意穿防滑鞋' },
+        { icon: '🌡️', title: '18:00 晚餐测体温', desc: '晚餐前测体温，超过37.3°C需关注。晚餐宜清淡，7分饱为宜' },
+        { icon: '💊', title: '20:00 晚间用药', desc: '按医嘱服用晚间药物，如有助眠药需在睡前30分钟服用' },
+        { icon: '🌙', title: '21:30 助眠准备', desc: '热水泡脚15分钟，关闭强光，22点前入睡。夜间如厕开小夜灯防跌倒' }
       ]
     }
   },
@@ -202,7 +210,7 @@ export default {
     async loadRiskData() {
       try {
         const res = await uni.request({
-          url: 'http://localhost:8080/api/risk/latest',
+          url: 'http://121.43.211.31:8080/api/risk/latest',
           method: 'GET'
         })
         if (res.statusCode === 200 && res.data.code === 200 && res.data.data) {
@@ -252,7 +260,7 @@ export default {
         const userInfo = uni.getStorageSync('userInfo')
         if (userInfo && userInfo.phone) {
           const res = await uni.request({
-            url: `http://localhost:8080/api/guardian/${userInfo.phone}`,
+            url: `http://121.43.211.31:8080/api/guardian/${userInfo.phone}`,
             method: 'GET'
           })
           if (res.statusCode === 200 && res.data.code === 200) {

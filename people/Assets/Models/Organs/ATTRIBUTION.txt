@@ -1,0 +1,32 @@
+3D Organ Models — Attribution & License
+==========================================
+
+Source: HuBMAP Common Coordinate Framework (CCF) 3D Reference Object Library
+Version: v1.2
+Repository: https://github.com/hubmapconsortium/ccf-releases
+Project Page: https://hubmapconsortium.github.io/ccf/pages/ccf-3d-reference-library.html
+
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+         https://creativecommons.org/licenses/by/4.0/
+
+Models Used in This Project:
+----------------------------
+1. Heart.glb     <- VH_M_Heart.glb         (Visible Human Project, Male)
+2. Lung.glb      <- VH_M_Lung.glb          (Visible Human Project, Male)
+3. Brain.glb     <- Allen_M_Brain.glb      (Allen Brain Atlas, Male)
+
+Attribution Statement (to be included in app credits / about page):
+-------------------------------------------------------------------
+"Anatomical 3D models provided by the HuBMAP Consortium CCF 3D Reference
+Object Library (v1.2), licensed under CC BY 4.0. Heart and Lung models
+derived from the Visible Human Project; Brain model from the Allen Brain Atlas.
+Source: https://github.com/hubmapconsortium/ccf-releases"
+
+Notes:
+------
+- These models are anatomically accurate references developed by medical
+  illustrators and approved by organ experts.
+- Used here non-commercially for the "i龄守护" digital twin elderly health
+  monitoring system project.
+- Modifications may be made to materials, scale, and orientation for
+  visualization purposes within the Unity project.

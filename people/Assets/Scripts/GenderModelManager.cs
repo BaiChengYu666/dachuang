@@ -33,9 +33,9 @@ public class GenderModelManager : MonoBehaviour
     [SerializeField] private float femaleWalkFallZCorrection = -7f;
 
     [Header("行为监测设置")]
-    public string backendUrl   = "http://localhost:8080";
+    public string backendUrl   = "http://121.43.211.31:8080";
     public int    elderlyId    = 1;
-    public float  pollInterval = 3f;
+    public float  pollInterval = 5f;
 
     [Header("演示模式（无后端时自动循环站立/步行）")]
     public bool  enableDemoMode       = true;

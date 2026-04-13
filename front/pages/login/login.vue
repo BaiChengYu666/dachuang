@@ -156,7 +156,7 @@ export default {
         uni.showLoading({ title: '登录中...' })
         const res = await new Promise((resolve, reject) => {
           uni.request({
-            url: 'http://localhost:8080/api/auth/login',
+            url: 'http://121.43.211.31:8080/api/auth/login',
             method: 'POST',
             data: { username: phone, password },
             success: resolve,
@@ -199,7 +199,7 @@ export default {
         uni.showLoading({ title: '注册中...' })
         const res = await new Promise((resolve, reject) => {
           uni.request({
-            url: 'http://localhost:8080/api/auth/register',
+            url: 'http://121.43.211.31:8080/api/auth/register',
             method: 'POST',
             data: { phone, password, gender },
             success: resolve,

@@ -463,7 +463,7 @@ export default {
 
       try {
         const res = await uni.request({
-          url: `http://localhost:8080/api/forecast/1?hours=${this.hours}`,
+          url: `http://121.43.211.31:8080/api/forecast/1?hours=${this.hours}`,
           method: 'GET'
         })
 

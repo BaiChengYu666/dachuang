@@ -5,7 +5,7 @@ async getAIResponse(question) {
   try {
     // 调用测试接口（不调用DeepSeek，先测试通畅）
     const res = await uni.request({
-      url: 'http://localhost:8080/api/ai/chat-test',  // ← 改成测试接口
+      url: 'http://121.43.211.31:8080/api/ai/chat-test',  // ← 改成测试接口
       method: 'POST',
       header: {
         'Content-Type': 'application/json'
@@ -46,4 +46,4 @@ async getAIResponse(question) {
 },
 
 // 测试通过后，再改回：
-// url: 'http://localhost:8080/api/ai/chat',
+// url: 'http://121.43.211.31:8080/api/ai/chat',

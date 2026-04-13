@@ -10,7 +10,7 @@ export default defineConfig({
     host: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
+        target: 'http://121.43.211.31:8080',
         changeOrigin: true,
         rewrite: (path) => path
       }

@@ -27,6 +27,7 @@
         </view>
           </view>
       <view class="unity-frame">
+        <!-- #ifdef H5 -->
         <web-view
           v-if="unityUrl"
           :src="unityUrl"
@@ -38,6 +39,15 @@
           <view class="loading-spin"></view>
           <text class="loading-txt">3D 模型加载中...</text>
         </view>
+        <!-- #endif -->
+        <!-- #ifdef MP-WEIXIN -->
+        <view class="unity-preview" @click="goToUnity">
+          <image class="unity-preview-img" src="/static/images/unity-preview.png" mode="aspectFill"></image>
+          <view class="unity-preview-mask">
+            <text class="unity-preview-btn">点击查看 3D 模型</text>
+          </view>
+        </view>
+        <!-- #endif -->
         <!-- 心率浮层 -->
         <view class="hr-overlay" :class="{beat: heartBeat}">
           <text class="hr-icon">❤️</text>
@@ -285,6 +295,13 @@ export default {
     if (!this._behaviorInterval) {
       this.startBehaviorPoll()
     }
+    if (!this._globalSyncInterval) {
+      this.startGlobalDataSync()
+    }
+    // 后端未连接 + Unity 已加载时才启动演示模式
+    if (!this.unityLoading && !this._inDemoMode && !this.backendConnected) {
+      this.startDemoMode()
+    }
     this.loadBackendData()
   },
 
@@ -293,10 +310,11 @@ export default {
       clearInterval(this._timer)
       this._timer = null
     }
-    if (this._behaviorInterval) {
-      clearInterval(this._behaviorInterval)
-      this._behaviorInterval = null
+    if (this._globalSyncInterval) {
+      clearInterval(this._globalSyncInterval)
+      this._globalSyncInterval = null
     }
+    this.stopDemoMode()
   },
 
   onUnload() {
@@ -304,10 +322,11 @@ export default {
       clearInterval(this._timer)
       this._timer = null
     }
-    if (this._behaviorInterval) {
-      clearInterval(this._behaviorInterval)
-      this._behaviorInterval = null
+    if (this._globalSyncInterval) {
+      clearInterval(this._globalSyncInterval)
+      this._globalSyncInterval = null
     }
+    this.stopDemoMode()
   },
 
   methods: {
@@ -357,21 +376,33 @@ export default {
             this.elderlyId = userInfo.elderlyId
           }
         }
-        // 无论用户性别，3D模型始终使用男性
-        this.unityUrl = `https://unity-web-gl-iota.vercel.app/index.html?gender=male`
+        const gender = this.userInfo.gender
+        this.unityUrl = `http://121.43.211.31:8081/index.html?gender=${gender}`
       } catch (e) {
         console.error('读取用户信息失败:', e)
       }
     },
 
-    onUnityLoad() { this.unityLoading = false },
+    onUnityLoad() {
+      this.unityLoading = false
+      // Unity 加载完成后拉取后端数据，后端不可用时才启动演示
+      setTimeout(() => {
+        if (!this.backendConnected) this.startDemoMode()
+      }, 3000)
+    },
     onUnityError() { this.unityLoading = false },
+
+    goToUnity() {
+      // #ifdef MP-WEIXIN
+      uni.navigateTo({ url: '/pages/unity/unity' })
+      // #endif
+    },
 
     async loadBackendData() {
       try {
         const res = await new Promise((resolve, reject) => {
           uni.request({
-            url: `http://localhost:8080/api/data/latest/${this.elderlyId}`,
+            url: `http://121.43.211.31:8080/api/data/latest/${this.elderlyId}`,
             method: 'GET',
             success: resolve,
             fail: reject
@@ -386,6 +417,8 @@ export default {
             this.healthData.bloodOxygen = data.physiological.bloodOxygen || 98
             this.healthData.temperature = data.physiological.bodyTemperature || 36.5
             this.backendConnected = true
+            // 后端已连接，停止前端演示模式，使用真实数据
+            if (this._inDemoMode) this.stopDemoMode()
             this.updateHealthStatus()
           } else {
             this.backendConnected = false
@@ -415,9 +448,9 @@ export default {
       if (this._timer) clearInterval(this._timer)
       this._timer = setInterval(async () => {
         if (this.backendConnected) {
-          // 拉后端最新数据，再叠加传感器抖动让界面有变化感
+          // 同时拉取健康+行为数据，保持两者同步
           await this.loadBackendData()
-          this.applySensorJitter()
+          this.fetchBehaviorData()
         } else {
           this.simulateHealthChange()
         }
@@ -425,7 +458,7 @@ export default {
         setTimeout(() => { this.dataFlash = false }, 800)
         this.heartBeat = true
         setTimeout(() => { this.heartBeat = false }, 300)
-      }, 4000)
+      }, 5000)
     },
 
     // 后端已连接：在真实数据基础上叠加小幅抖动，模拟传感器实时波动
@@ -449,18 +482,15 @@ export default {
       d.bloodPressure.low  = Math.round(Math.max(70,  Math.min(90,  d.bloodPressure.low  + (Math.random() - 0.5) * 5)))
     },
 
-    // ---- 行为轮询 ----
+    // ---- 行为轮询（已合并到 startHealthDataUpdate 中，此处仅供首次加载调用） ----
     startBehaviorPoll() {
-      if (this._behaviorInterval) clearInterval(this._behaviorInterval)
+      // 行为数据现在和健康数据同步拉取（每5秒），不再单独轮询
       this.fetchBehaviorData()
-      this._behaviorInterval = setInterval(() => {
-        this.fetchBehaviorData()
-      }, 8000)
     },
 
     fetchBehaviorData() {
       uni.request({
-        url: `http://localhost:8080/api/data/behavior/latest/${this.elderlyId}`,
+        url: `http://121.43.211.31:8080/api/data/behavior/latest/${this.elderlyId}`,
         method: 'GET',
         success: (res) => {
           if (res.statusCode === 200 && res.data && res.data.code === 200 && res.data.data) {
@@ -478,6 +508,11 @@ export default {
       // 同步更新行为卡片
       const labelMap = { walking: '步行', standing: '站立', falling: '跌倒' }
       this.behavior.activity = labelMap[(activityType || '').toLowerCase()] || this.behavior.activity
+
+      // 步行时步数递增（每次调用 +8~15 步，模拟真实步频）
+      if (activityType.toLowerCase() === 'walking') {
+        this.behavior.steps += Math.floor(Math.random() * 8) + 8
+      }
 
       // 推送到全局状态（同步行为页时间轴）
       try {
@@ -504,6 +539,72 @@ export default {
       } else if (!falling) {
         this.isFalling = false
       }
+    },
+
+    // ---- 演示模式：镜像 Unity JS 动画节奏（站立8s → 步行15s 无限循环）----
+    startDemoMode() {
+      if (this._inDemoMode) return
+      this._inDemoMode = true
+      const cycle = () => {
+        if (!this._inDemoMode) return
+        this.applyBehavior('Standing')
+        this._demoTimeout = setTimeout(() => {
+          if (!this._inDemoMode) return
+          this.applyBehavior('Walking')
+          this._demoTimeout = setTimeout(cycle, 15000) // 步行持续 15s
+        }, 8000) // 站立持续 8s
+      }
+      cycle()
+    },
+
+    stopDemoMode() {
+      this._inDemoMode = false
+      if (this._demoTimeout) { clearTimeout(this._demoTimeout); this._demoTimeout = null }
+    },
+
+    // 每2秒从全局状态同步行为（演示模式由 unity.vue 写入全局）
+    startGlobalDataSync() {
+      if (this._globalSyncInterval) clearInterval(this._globalSyncInterval)
+      this._globalSyncInterval = setInterval(() => { this.syncBehaviorFromGlobal() }, 2000)
+    },
+
+    syncBehaviorFromGlobal() {
+      try {
+        const app = getApp()
+        if (!app || !app.globalData) return
+
+        // 始终刷新活动时长（即使行为没变，时长也在增加）
+        if (app.getBehaviorDuration) {
+          this.behavior.duration = app.getBehaviorDuration()
+        }
+
+        const gd = app.globalData.currentBehavior
+        if (!gd) return
+        const gdKey = gd.toLowerCase()
+        const curKey = (this.currentBehavior || '').toLowerCase()
+        if (gdKey === curKey) return  // 行为没变，时长已在上面更新
+
+        // 行为变化：更新展示
+        this.currentBehavior = gd
+        const labelMap = { walking: '步行', standing: '站立', falling: '跌倒' }
+        const label = labelMap[gdKey]
+        if (label) this.behavior.activity = label
+
+        const falling = gdKey === 'falling' || gd === '跌倒'
+        if (falling && !this.isFalling) {
+          this.isFalling = true
+          uni.showModal({
+            title: '⚠️ 跌倒警报',
+            content: '检测到老人可能发生跌倒，请立即查看！',
+            confirmText: '立即查看',
+            cancelText: '已知晓',
+            showCancel: true,
+            success: (res) => { if (res.confirm) this.goToPage('/pages/behavior/behavior') }
+          })
+        } else if (!falling) {
+          this.isFalling = false
+        }
+      } catch (e) {}
     },
 
     getHeartRateStatus(v) {
@@ -640,11 +741,11 @@ export default {
 
 .unity-frame {
   width: 100%;
-  height: 600rpx;
+  height: 820rpx;
   border-radius: 20rpx;
   overflow: hidden;
   position: relative;
-  background: #E8F5E9;
+  background: #1a3a2a;
 }
 
 .unity-webview {

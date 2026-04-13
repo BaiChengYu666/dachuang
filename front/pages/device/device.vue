@@ -98,7 +98,7 @@ export default {
       if (!this.userPhone) return
       try {
         const res = await uni.request({
-          url: `http://localhost:8080/api/device/${this.userPhone}`,
+          url: `http://121.43.211.31:8080/api/device/${this.userPhone}`,
           method: 'GET'
         })
         if (res.statusCode === 200 && res.data.code === 200) {
@@ -143,7 +143,7 @@ export default {
           try {
             uni.showLoading({ title: '添加中...' })
             const result = await uni.request({
-              url: 'http://localhost:8080/api/device',
+              url: 'http://121.43.211.31:8080/api/device',
               method: 'POST',
               header: { 'Content-Type': 'application/json' },
               data: {
@@ -177,7 +177,7 @@ export default {
           if (!res.confirm || !res.content?.trim()) return
           try {
             const result = await uni.request({
-              url: `http://localhost:8080/api/device/${dev.id}`,
+              url: `http://121.43.211.31:8080/api/device/${dev.id}`,
               method: 'PUT',
               header: { 'Content-Type': 'application/json' },
               data: { deviceName: res.content.trim() }
@@ -198,7 +198,7 @@ export default {
           if (!res.confirm) return
           try {
             const result = await uni.request({
-              url: `http://localhost:8080/api/device/${id}?userPhone=${this.userPhone}`,
+              url: `http://121.43.211.31:8080/api/device/${id}?userPhone=${this.userPhone}`,
               method: 'DELETE'
             })
             if (result.statusCode === 200 && result.data.code === 200) {
